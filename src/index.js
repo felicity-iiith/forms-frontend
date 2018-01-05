@@ -9,6 +9,7 @@ import { init as authinit, reloadUserinfo } from "./auth";
 import "./fetchWithAuth";
 
 import Hello from "./Hello";
+import Viewer from "./Viewer";
 
 const browserHistory = createBrowserHistory();
 window.browserHistory = browserHistory;
@@ -22,6 +23,7 @@ const routes = (
   <Router asyncBefore={routeChange} history={browserHistory}>
     <Route path={process.env.PUBLIC_URL} component={App}>
       <IndexRoute component={Hello} />
+      <Route path="/:formslug" component={Viewer} />
     </Route>
   </Router>
 );
