@@ -33,8 +33,23 @@ const Field = ({
 
 class Viewer extends Component {
   state = {
-    entry: {}
+    entry: {},
+    filled: false
   };
+
+  componentWillMount = () => {
+    let response = null;
+    if (this.props.data.response) {
+      response = this.props.data.response.response;
+      for (let key in response) {
+        const { entry } = this.state;
+        entry[key] = response[key];
+        this.setState({ entry });
+      }
+      this.setState({ filled: true });
+    }
+  };
+
   onChange = (fieldname, value) => {
     const { entry } = this.state;
     entry[fieldname] = value;
@@ -49,6 +64,7 @@ class Viewer extends Component {
       body: { response: JSON.stringify(entry) }
     });
     var body = await res.json();
+    this.setState({ error: body.error });
     if (res.ok) window.browserHistory.push("/");
     else this.setState({ error: body.error });
   };
@@ -58,6 +74,9 @@ class Viewer extends Component {
 
     return (
       <div>
+        {this.state.filled && (
+          <h4 className="error">You have already filled this form</h4>
+        )}
         <form onSubmit={this.onSubmit}>
           <fieldset>
             {fields.map((field, index) => (
@@ -69,7 +88,7 @@ class Viewer extends Component {
               />
             ))}
           </fieldset>
-          <button>Submit</button>
+          {!this.state.filled && <button>Submit</button>}
         </form>
       </div>
     );
