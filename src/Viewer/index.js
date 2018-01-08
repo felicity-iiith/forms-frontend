@@ -42,15 +42,22 @@ class Viewer extends Component {
 
   componentWillMount = () => {
     let response = null;
+    const { entry } = this.state;
     if (this.props.data.response) {
       response = this.props.data.response.response;
       for (let key in response) {
-        const { entry } = this.state;
         entry[key] = response[key];
-        this.setState({ entry });
       }
       this.setState({ filled: true });
     }
+    for (let field of this.props.data.fields) {
+      let value;
+      if (field.userinfo_attr) value = window.user.info[field.userinfo_attr];
+      else if (window.user.info[field.name])
+        value = window.user.info[field.name];
+      if (value) entry[field.name] = value;
+    }
+    this.setState({ entry });
   };
 
   onChange = (fieldname, value) => {
