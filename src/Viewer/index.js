@@ -13,6 +13,7 @@ const FieldMapping = {
 const Field = ({
   field: { type, name, label, description, data, server },
   value,
+  error,
   onChange
 }) => {
   const Inp = FieldMapping[type || "string"];
@@ -26,6 +27,7 @@ const Field = ({
         <h3 style={{ marginBottom: 0 }}>{lab}</h3>
       </label>
       {description && <span>{description}</span>}
+      {error && <span className="error">{error}</span>}
       <Inp name={name} data={data} value={value} onChange={onChange} />
     </div>
   );
@@ -34,7 +36,8 @@ const Field = ({
 class Viewer extends Component {
   state = {
     entry: {},
-    filled: false
+    filled: false,
+    errors: {}
   };
 
   componentWillMount = () => {
@@ -64,13 +67,12 @@ class Viewer extends Component {
       body: { response: JSON.stringify(entry) }
     });
     var body = await res.json();
-    this.setState({ error: body.error });
     if (res.ok) window.browserHistory.push("/");
-    else this.setState({ error: body.error });
+    else this.setState({ errors: body.errors });
   };
   render() {
     const { fields } = this.props.data;
-    const { entry } = this.state;
+    const { entry, errors } = this.state;
 
     return (
       <div>
@@ -83,6 +85,7 @@ class Viewer extends Component {
               <Field
                 key={field.name}
                 value={entry[field.name]}
+                error={errors[field.name]}
                 onChange={value => this.onChange(field.name, value)}
                 field={field}
               />
