@@ -74,7 +74,7 @@ class Viewer extends Component {
       body: { response: JSON.stringify(entry) }
     });
     var body = await res.json();
-    if (res.ok) window.browserHistory.push("/");
+    if (res.ok) this.setState({ filled: true, errors: {} });
     else this.setState({ errors: body.errors });
   };
   render() {
@@ -84,7 +84,7 @@ class Viewer extends Component {
     return (
       <div>
         {this.state.filled && (
-          <h4 className="error">You have already filled this form</h4>
+          <h4 className="success">You have successfully registered</h4>
         )}
         <form onSubmit={this.onSubmit}>
           <fieldset>
