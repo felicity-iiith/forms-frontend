@@ -78,14 +78,22 @@ class Viewer extends Component {
     else this.setState({ errors: body.errors });
   };
   render() {
+    const { next } = this.props.params;
     const { fields } = this.props.data;
     const { entry, errors } = this.state;
 
     return (
       <div>
-        {this.state.filled && (
-          <h4 className="success">You have successfully registered</h4>
-        )}
+        <div className="clearfix">
+          {this.state.filled && (
+            <h4 className="success float-left">
+              You have successfully registered
+            </h4>
+          )}
+          <a className="button float-right" href={next || "/"}>
+            Go Back
+          </a>
+        </div>
         <form onSubmit={this.onSubmit}>
           <fieldset>
             {fields.map((field, index) => (
