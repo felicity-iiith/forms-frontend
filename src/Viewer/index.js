@@ -11,7 +11,7 @@ const FieldMapping = {
 };
 
 const Field = ({
-  field: { type, name, label, description, data, server },
+  field: { type, name, label, description, data, server, optional },
   value,
   error,
   onChange
@@ -24,7 +24,12 @@ const Field = ({
   return (
     <div>
       <label>
-        <h3 style={{ marginBottom: 0 }}>{lab}</h3>
+        <h3 style={{ display: "inline-block", marginBottom: 0 }}>{lab}</h3>
+        {optional && (
+          <span style={{ fontWeight: "normal", fontSize: "1.4rem" }}>
+            &nbsp;&nbsp;&nbsp;(Optional)
+          </span>
+        )}
       </label>
       {description && <span>{description}</span>}
       {error && <span className="error">{error}</span>}
