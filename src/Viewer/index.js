@@ -13,6 +13,7 @@ const FieldMapping = {
 const Field = ({
   field: { type, name, label, description, data, server, optional },
   value,
+  readOnly,
   error,
   onChange
 }) => {
@@ -20,7 +21,6 @@ const Field = ({
   const lab = label || capitalize(name);
 
   if (server) return null;
-
   return (
     <div>
       <label>
@@ -33,7 +33,13 @@ const Field = ({
       </label>
       {description && <span>{description}</span>}
       {error && <span className="error">{error}</span>}
-      <Inp name={name} data={data} value={value} onChange={onChange} />
+      <Inp
+        name={name}
+        data={data}
+        value={value}
+        onChange={onChange}
+        readOnly={readOnly}
+      />
     </div>
   );
 };
@@ -99,18 +105,18 @@ class Viewer extends Component {
   render() {
     const { next } = this.props.params;
     const { fields, payment } = this.props.data;
-    const { entry, errors, paid } = this.state;
+    const { entry, errors, paid, filled } = this.state;
 
     return (
       <div>
         <div className="clearfix">
-          {this.state.filled &&
+          {filled &&
             (!payment || paid) && (
               <h4 className="success float-left">
                 You have successfully registered
               </h4>
             )}
-          {this.state.filled &&
+          {filled &&
             payment &&
             !paid && (
               <h4 className="error float-left">
@@ -130,6 +136,7 @@ class Viewer extends Component {
                 error={errors[field.name]}
                 onChange={value => this.onChange(field.name, value)}
                 field={field}
+                readOnly={filled}
               />
             ))}
           </fieldset>
