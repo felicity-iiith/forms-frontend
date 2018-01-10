@@ -42,6 +42,7 @@ class Viewer extends Component {
   state = {
     entry: {},
     filled: false,
+    paid: false,
     errors: {}
   };
 
@@ -53,7 +54,10 @@ class Viewer extends Component {
       for (let key in response) {
         entry[key] = response[key];
       }
-      this.setState({ filled: true });
+      this.setState({
+        filled: true,
+        paid: this.props.data.response.payment_status
+      });
     }
     for (let field of this.props.data.fields) {
       let value;
@@ -70,31 +74,49 @@ class Viewer extends Component {
     entry[fieldname] = value;
     this.setState({ entry });
   };
+  redirectToPayment = () => {
+    const { formslug } = this.props.params;
+    window.location.assign(
+      `${process.env.INFERNO_APP_BACKEND_URL}/forms/${formslug}/initiatePayment`
+    );
+  };
   onSubmit = async e => {
     e.preventDefault();
     const { formslug } = this.props.params;
-    const { entry } = this.state;
+    const { payment } = this.props.data;
+    const { entry, filled } = this.state;
+    if (filled && payment) this.redirectToPayment();
     var res = await fetchWithAuth(`/forms/${formslug}/response`, {
       method: "POST",
       body: { response: JSON.stringify(entry) }
     });
     var body = await res.json();
-    if (res.ok) this.setState({ filled: true, errors: {} });
-    else this.setState({ errors: body.errors });
+    if (res.ok) {
+      if (payment) this.redirectToPayment();
+      else this.setState({ filled: true, errors: {} });
+    } else this.setState({ errors: body.errors });
   };
   render() {
     const { next } = this.props.params;
-    const { fields } = this.props.data;
-    const { entry, errors } = this.state;
+    const { fields, payment } = this.props.data;
+    const { entry, errors, paid } = this.state;
 
     return (
       <div>
         <div className="clearfix">
-          {this.state.filled && (
-            <h4 className="success float-left">
-              You have successfully registered
-            </h4>
-          )}
+          {this.state.filled &&
+            (!payment || paid) && (
+              <h4 className="success float-left">
+                You have successfully registered
+              </h4>
+            )}
+          {this.state.filled &&
+            payment &&
+            !paid && (
+              <h4 className="error float-left">
+                Your payment was unsuccessful. Please try to pay again.
+              </h4>
+            )}
           <a className="button float-right" href={next || "/"}>
             Go Back
           </a>
@@ -111,7 +133,9 @@ class Viewer extends Component {
               />
             ))}
           </fieldset>
-          {!this.state.filled && <button>Submit</button>}
+          {!this.state.filled && !payment && <button>Submit</button>}
+          {payment &&
+            !paid && <button>Proceed to pay &#8377; {payment.amount}</button>}
         </form>
       </div>
     );
