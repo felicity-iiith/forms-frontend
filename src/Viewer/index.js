@@ -63,7 +63,8 @@ class Viewer extends Component {
       if (value) entry[field.name] = value;
     }
     if (this.props.data.response) {
-      response = JSON.parse(this.props.data.response.response);
+      response = this.props.data.response.response;
+      response = typeof response === "string" ? JSON.parse(response) : response;
       for (let key in response) {
         entry[key] = response[key];
       }
