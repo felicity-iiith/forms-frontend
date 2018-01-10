@@ -55,8 +55,15 @@ class Viewer extends Component {
   componentWillMount = () => {
     let response = null;
     const { entry } = this.state;
+    for (let field of this.props.data.fields) {
+      let value;
+      if (field.userinfo_attr) value = window.user.info[field.userinfo_attr];
+      else if (window.user.info[field.name])
+        value = window.user.info[field.name];
+      if (value) entry[field.name] = value;
+    }
     if (this.props.data.response) {
-      response = this.props.data.response.response;
+      response = JSON.parse(this.props.data.response.response);
       for (let key in response) {
         entry[key] = response[key];
       }
@@ -64,13 +71,6 @@ class Viewer extends Component {
         filled: true,
         paid: this.props.data.response.payment_status
       });
-    }
-    for (let field of this.props.data.fields) {
-      let value;
-      if (field.userinfo_attr) value = window.user.info[field.userinfo_attr];
-      else if (window.user.info[field.name])
-        value = window.user.info[field.name];
-      if (value) entry[field.name] = value;
     }
     this.setState({ entry });
   };
