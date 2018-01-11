@@ -30,7 +30,7 @@ class ResViewer extends Component {
     if (!form) return [];
     row = [...form.fields.map(field => field.name)];
     table.push(row);
-    entries.map(entry => {
+    entries.forEach(function(entry) {
       row = [];
       Object.keys(entry.response).forEach(key => row.push(entry.response[key]));
       table.push(row);

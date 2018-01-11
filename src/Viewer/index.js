@@ -50,8 +50,7 @@ class Viewer extends Component {
     entry: {},
     filled: false,
     paid: false,
-    errors: {},
-    admin: false
+    errors: {}
   };
 
   componentWillMount = () => {
@@ -76,7 +75,6 @@ class Viewer extends Component {
       });
     }
     this.setState({ entry });
-    if (this.props.data.isAdmin) this.setState({ admin: true });
   };
 
   onChange = (fieldname, value) => {
@@ -107,18 +105,18 @@ class Viewer extends Component {
     } else this.setState({ errors: body.errors });
   };
   render() {
-    const { next } = this.props.params;
-    const { fields, payment, seats_left } = this.props.data;
+    const { formslug, next } = this.props.params;
+    const { fields, payment, seats_left, isAdmin } = this.props.data;
     const { entry, errors, paid, filled } = this.state;
 
     return (
       <div>
         <div className="clearfix">
-          {this.state.admin && (
+          {isAdmin && (
             <a
               className="button float-right"
               style={{ marginLeft: 10 }}
-              href={"/sample/responses"}
+              href={`${process.env.PUBLIC_URL}/${formslug}/responses`}
             >
               View Responses
             </a>
