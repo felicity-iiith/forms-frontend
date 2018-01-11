@@ -28,11 +28,13 @@ class ResViewer extends Component {
       row = [];
     const { form, entries } = this.state;
     if (!form) return [];
-    row = [...form.fields.map(field => field.name)];
+    row = ["username", ...form.fields.map(field => field.name)];
+    if (form.payment) row.push("payment_status");
     table.push(row);
     entries.forEach(function(entry) {
-      row = [];
+      row = [entry.userUsername];
       Object.keys(entry.response).forEach(key => row.push(entry.response[key]));
+      if (form.payment) row.push(entry.payment_status ? "Paid" : "Not paid");
       table.push(row);
     });
     return table;
