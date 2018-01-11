@@ -10,6 +10,7 @@ import "./fetchWithAuth";
 
 import Hello from "./Hello";
 import Viewer from "./Viewer";
+import ResViewer from "./ResViewer";
 
 const browserHistory = createBrowserHistory();
 window.browserHistory = browserHistory;
@@ -24,6 +25,7 @@ const routes = (
     <Route path={process.env.PUBLIC_URL} component={App}>
       <IndexRoute component={Hello} />
       <Route path="/:formslug" component={Viewer} />
+      <Route path="/:formslug/responses" component={ResViewer} />
     </Route>
   </Router>
 );

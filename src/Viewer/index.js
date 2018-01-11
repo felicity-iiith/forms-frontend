@@ -50,7 +50,8 @@ class Viewer extends Component {
     entry: {},
     filled: false,
     paid: false,
-    errors: {}
+    errors: {},
+    admin: false
   };
 
   componentWillMount = () => {
@@ -75,6 +76,7 @@ class Viewer extends Component {
       });
     }
     this.setState({ entry });
+    if (this.props.data.isAdmin) this.setState({ admin: true });
   };
 
   onChange = (fieldname, value) => {
@@ -112,6 +114,15 @@ class Viewer extends Component {
     return (
       <div>
         <div className="clearfix">
+          {this.state.admin && (
+            <a
+              className="button float-right"
+              style={{ marginLeft: 10 }}
+              href={"/sample/responses"}
+            >
+              View Responses
+            </a>
+          )}
           {filled &&
             (!payment || paid) && (
               <h4 className="success float-left">
