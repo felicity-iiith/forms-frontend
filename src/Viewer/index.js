@@ -93,7 +93,10 @@ class Viewer extends Component {
     const { formslug } = this.props.params;
     const { payment } = this.props.data;
     const { entry, filled } = this.state;
-    if (filled && payment) this.redirectToPayment();
+    if (filled && payment) {
+      this.redirectToPayment();
+      return;
+    }
     var res = await fetchWithAuth(`/forms/${formslug}/response`, {
       method: "POST",
       body: { response: JSON.stringify(entry) }
