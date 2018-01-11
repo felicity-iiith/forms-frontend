@@ -112,6 +112,9 @@ class Viewer extends Component {
     const { fields, payment, seats_left, isAdmin } = this.props.data;
     const { entry, errors, paid, filled } = this.state;
 
+    // Successfully registered and payment done
+    const registered = filled && (!payment || paid);
+
     return (
       <div>
         <div className="clearfix">
@@ -124,27 +127,25 @@ class Viewer extends Component {
               View Responses
             </a>
           )}
+          {registered && (
+            <h4 className="success float-left">
+              You have successfully registered.
+            </h4>
+          )}
           {filled &&
-            (!payment || paid) && (
-              <h4 className="success float-left">
-                You have successfully registered
-              </h4>
-            )}
-          {filled &&
-            payment &&
-            !paid && (
+            !registered && (
               <h4 className="error float-left">
                 Your payment was unsuccessful. Please try to pay again.
               </h4>
             )}
           {errors._meta && <h4 className="error float-left">{errors._meta}</h4>}
-          {!filled &&
+          {!registered &&
             seats_left && (
               <h4 className="info float-left">
                 Hurry, only {seats_left} seats left!
               </h4>
             )}
-          {!filled &&
+          {!registered &&
             seats_left === 0 && (
               <h4 className="error float-left">Sorry, all seats sold out.</h4>
             )}
@@ -165,7 +166,7 @@ class Viewer extends Component {
               />
             ))}
           </fieldset>
-          {!this.state.filled && !payment && <button>Submit</button>}
+          {!filled && !payment && <button>Submit</button>}
           {payment &&
             !paid && <button>Proceed to pay &#8377; {payment.amount}</button>}
         </form>
