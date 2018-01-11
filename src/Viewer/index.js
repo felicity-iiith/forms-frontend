@@ -4,10 +4,11 @@ import Component from "inferno-component";
 
 import dataUIComponent from "../dataUIComponent";
 import { capitalize } from "../utilities";
-import { StringField } from "./Fields";
+import { StringField, SelectField } from "./Fields";
 
 const FieldMapping = {
-  string: StringField
+  string: StringField,
+  select: SelectField
 };
 
 const Field = ({
