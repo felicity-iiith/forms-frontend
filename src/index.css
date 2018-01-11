@@ -30,3 +30,7 @@ body {
 .success {
   color: green;
 }
+
+.info {
+  color: goldenrod;
+}

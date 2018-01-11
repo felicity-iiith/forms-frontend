@@ -105,7 +105,7 @@ class Viewer extends Component {
   };
   render() {
     const { next } = this.props.params;
-    const { fields, payment } = this.props.data;
+    const { fields, payment, seats_left } = this.props.data;
     const { entry, errors, paid, filled } = this.state;
 
     return (
@@ -123,6 +123,16 @@ class Viewer extends Component {
               <h4 className="error float-left">
                 Your payment was unsuccessful. Please try to pay again.
               </h4>
+            )}
+          {!filled &&
+            seats_left !== 0 && (
+              <h4 className="info float-left">
+                Hurry, only {seats_left} seats left!
+              </h4>
+            )}
+          {!filled &&
+            seats_left === 0 && (
+              <h4 className="error float-left">Sorry, all seats sold out.</h4>
             )}
           <a className="button float-right" href={next || "/"}>
             Go Back
