@@ -136,7 +136,7 @@ class Viewer extends Component {
             )}
           {errors._meta && <h4 className="error float-left">{errors._meta}</h4>}
           {!filled &&
-            seats_left !== 0 && (
+            seats_left && (
               <h4 className="info float-left">
                 Hurry, only {seats_left} seats left!
               </h4>
