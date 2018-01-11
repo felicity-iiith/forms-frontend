@@ -124,6 +124,7 @@ class Viewer extends Component {
                 Your payment was unsuccessful. Please try to pay again.
               </h4>
             )}
+          {errors._meta && <h4 className="error float-left">{errors._meta}</h4>}
           {!filled &&
             seats_left !== 0 && (
               <h4 className="info float-left">
