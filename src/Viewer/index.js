@@ -110,7 +110,13 @@ class Viewer extends Component {
   };
   render() {
     const { formslug, next } = this.props.params;
-    const { fields, payment, seats_left, isAdmin } = this.props.data;
+    const {
+      fields,
+      payment,
+      seats_left,
+      isAdmin,
+      description
+    } = this.props.data;
     const { entry, errors, paid, filled } = this.state;
 
     // Successfully registered and payment done
@@ -118,6 +124,9 @@ class Viewer extends Component {
 
     return (
       <div>
+        {description && (
+          <div dangerouslySetInnerHTML={{ __html: description }} />
+        )}
         <div className="clearfix">
           {isAdmin && (
             <a
