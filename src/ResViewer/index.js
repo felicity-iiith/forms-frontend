@@ -33,7 +33,11 @@ class ResViewer extends Component {
     table.push(row);
     entries.forEach(function(entry) {
       row = [entry.userUsername];
-      Object.keys(entry.response).forEach(key => row.push(entry.response[key]));
+      Object.keys(entry.response).forEach(key => {
+        let res = entry.response[key];
+        if (typeof res !== "string") res = JSON.stringify(res);
+        row.push(res);
+      });
       if (form.payment) row.push(entry.payment_status ? "Paid" : "Not paid");
       table.push(row);
     });
